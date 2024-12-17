@@ -52,23 +52,28 @@ function onMessageReceived(event) {
       });
       break;
     case "message":
+      const scrollToBottom =
+        Math.floor(chatMessages.offsetHeight + chatMessages.scrollTop) ===
+        chatMessages.scrollHeight;
       appendMessage(event.data);
+      if (scrollToBottom) {
+        chatMessages.scrollTop = 1000000000;
+      }
       break;
-    case 'previousMessages':
-      event.data.forEach(appendMessage)
-
+    case "previousMessages":
+      event.data.forEach(appendMessage);
   }
 }
 
 function appendMessage(message) {
   const messageEl = document.createElement("div");
-      messageEl.className = `message message-${
-        message.sender === "me" ? "to" : "from"
-      }`;
-      messageEl.innerHTML = `
+  messageEl.className = `message message-${
+    message.sender === "me" ? "to" : "from"
+  }`;
+  messageEl.innerHTML = `
         ${event.data.sender === "me" ? "" : `<h4>${message.name}</h4>`}
         <p class="message-text">${message.message}</p>`;
-      chatMessages.appendChild(messageEl);
+  chatMessages.appendChild(messageEl);
 }
 
 function getQueryParams() {
